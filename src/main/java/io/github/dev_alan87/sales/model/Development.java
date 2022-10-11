@@ -1,4 +1,4 @@
-package io.github.dev_alan87.sales.configuration;
+package io.github.dev_alan87.sales.model;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,6 +12,6 @@ import org.springframework.context.annotation.Profile;
 @Retention(RetentionPolicy.RUNTIME)
 @Configuration
 @Profile("development")
-public @interface DevelopmentConfig {
+public @interface Development {
 
 }
