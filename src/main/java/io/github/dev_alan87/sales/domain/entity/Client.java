@@ -1,4 +1,4 @@
-package io.github.dev_alan87.sales.model;
+package io.github.dev_alan87.sales.domain.entity;
 
 public class Client {
 

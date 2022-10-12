@@ -1,4 +1,4 @@
-package io.github.dev_alan87.sales.model;
+package io.github.dev_alan87.sales.configuration;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

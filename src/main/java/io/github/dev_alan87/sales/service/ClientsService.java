@@ -2,7 +2,7 @@ package io.github.dev_alan87.sales.service;
 
 import org.springframework.stereotype.Service;
 
-import io.github.dev_alan87.sales.model.Client;
+import io.github.dev_alan87.sales.domain.entity.Client;
 import io.github.dev_alan87.sales.respository.ClientsRepository;
 
 @Service
