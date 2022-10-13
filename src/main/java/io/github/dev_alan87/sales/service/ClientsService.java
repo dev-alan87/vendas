@@ -3,20 +3,20 @@ package io.github.dev_alan87.sales.service;
 import org.springframework.stereotype.Service;
 
 import io.github.dev_alan87.sales.domain.entity.Client;
-import io.github.dev_alan87.sales.respository.ClientsRepository;
+import io.github.dev_alan87.sales.domain.respository.Clients;
 
 @Service
 public class ClientsService {
 
-	private ClientsRepository repository;
+	private Clients repository;
 	
-	public ClientsService(ClientsRepository repository) {
+	public ClientsService(Clients repository) {
 		this.repository = repository;
 	}
 	
 	public void saveClient(Client client) {
 		if(validateClient(client))
-			this.repository.persist(client);
+			this.repository.save(client);
 	}
 	
 	public boolean validateClient(Client client) {
