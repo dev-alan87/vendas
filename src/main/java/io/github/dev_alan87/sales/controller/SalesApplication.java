@@ -1,6 +1,8 @@
 package io.github.dev_alan87.sales.controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -29,9 +31,11 @@ public class SalesApplication {
 	@Bean
 	public CommandLineRunner init(@Autowired Clients clients) {
 		return args -> {
-			Client client = new Client();
-			client.setName("Alan Alves");
-			clients.save(client);
+			clients.save(new Client("Alan Alves"));
+			clients.save(new Client("Maria do Carmo"));
+			
+			List<Client> listClients = clients.listAll();
+			listClients.forEach(System.out::println);
 		};
 	}
 
