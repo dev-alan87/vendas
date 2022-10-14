@@ -20,7 +20,6 @@ public class ClientsService {
 	}
 	
 	public boolean validateClient(Client client) {
-		//TODO: implement validate clients method
 		return true;
 	}
 	
