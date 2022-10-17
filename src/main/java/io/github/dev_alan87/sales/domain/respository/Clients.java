@@ -20,4 +20,20 @@ public class Clients {
 		return client;
 	}
 	
+	@Transactional
+	public Client update(Client client) {
+		manager.merge(client);
+		return client;
+	}
+	
+	@Transactional
+	public void delete(Client client) {
+		manager.remove(client);
+	}
+	@Transactional
+	public void delete(Integer id) {
+		delete(manager.find(Client.class, id));
+	}
+	
+	
 }

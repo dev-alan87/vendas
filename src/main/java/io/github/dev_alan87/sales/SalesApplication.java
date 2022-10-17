@@ -18,6 +18,7 @@ public class SalesApplication {
 	public CommandLineRunner init(@Autowired Clients clients) {
 		return args -> {
 			clients.save(new Client("Alan Alves"));
+			
 		};
 	}
 	
