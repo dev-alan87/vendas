@@ -1,6 +1,9 @@
 package io.github.dev_alan87.sales.domain.respository;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -35,5 +38,13 @@ public class Clients {
 		delete(manager.find(Client.class, id));
 	}
 	
+	@Transactional(readOnly = true)
+	public List<Client> findByName(String name) {
+		String jpql = "select c from Client c where c.name like :name";
+		TypedQuery<Client> query = manager.createQuery(jpql, Client.class);
+		query.setParameter("name", "%"+name+"%");
+		
+		return query.getResultList();
+	}
 	
 }
