@@ -29,7 +29,7 @@ public class Purchase {
 	@Column(name = "purchase_date")
 	private LocalDate purchaseDate;
 	
-	@Column(length = 20, precision = 2)
+	@Column()
 	private BigDecimal total;
 	
 	@OneToMany(mappedBy = "purchase")
@@ -64,6 +64,10 @@ public class Purchase {
 	}
 	public void setItems(List<PurchaseItem> items) {
 		this.items = items;
+	}
+	@Override
+	public String toString() {
+		return "Purchase [id=" + id + ", purchaseDate=" + purchaseDate + ", total=" + total + "]";
 	}
 	
 }

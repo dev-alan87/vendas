@@ -1,6 +1,7 @@
 package io.github.dev_alan87.sales;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -10,66 +11,34 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.dev_alan87.sales.domain.entity.Client;
+import io.github.dev_alan87.sales.domain.entity.Purchase;
 import io.github.dev_alan87.sales.domain.respository.Clients;
+import io.github.dev_alan87.sales.domain.respository.Purchases;
 
 @SpringBootApplication
 @RestController
 public class SalesApplication {
 
 	@Bean
-	public CommandLineRunner init(@Autowired Clients clients) {
+	public CommandLineRunner init(
+			@Autowired Clients clients,
+			@Autowired Purchases purchases
+			) {
 		return args -> {
-			System.out.println("Saving clients...");
-			clients.save(new Client("Alan Alves"));
-			clients.save(new Client("Simone Alves de Souza"));
-			clients.save(new Client("Maria do Carmo"));
 			
-			System.out.println("\nListing clients...");
-			List<Client> listClients = clients.findAll();
-			listClients.forEach(System.out::println);
+			Client clientAlan = new Client("Alan Alves");
+			clients.save(clientAlan);
 			
-			System.out.println("\nFind clients Alves...");
-			if(clients.existsByNameLike("%Alves%"))
-				clients.findByNameLike("%Alves%").forEach(System.out::println);
-			else
-				System.out.println("Clients not found");
+			Purchase purchase01 = new Purchase();
+			purchase01.setClient(clientAlan);
+			purchase01.setPurchaseDate(LocalDate.now());
+			purchase01.setTotal(BigDecimal.valueOf(100));
+			purchases.save(purchase01);
 			
-			System.out.println("\nList clients Carmo...");
-			if(clients.existsByNameLike("%Carmo%"))
-				clients.findByNameNative("%Carmo%").forEach(System.out::println);
-			else
-				System.out.println("Clients not found");
+			Client client = clients.findClientFetchPurchases(clientAlan.getId());
+			System.out.println(client);
+			System.out.println(client.getPurchases());
 			
-			System.out.println("\nUpdating clients...");
-			listClients.forEach(client -> {
-				client.setName(client.getName() + " (updated)");
-				clients.save(client);
-			});
-			
-			System.out.println("\nListing clients...");
-			listClients = clients.findAll();
-			listClients.forEach(System.out::println);
-			
-			System.out.println("\nDeleting Alan Alves (updated)...");
-			clients.findAll().forEach(client -> {
-				if(client.getName().equals("Alan Alves (updated)"))
-					clients.deleteByName(client.getName());
-			});
-			
-			System.out.println("\nListing clients...");
-			listClients = clients.findAll();
-			listClients.forEach(System.out::println);
-			
-			System.out.println("\nDeleting clients...");
-			clients.findAll().forEach(client -> {
-				clients.delete(client);
-			});
-			listClients = clients.findAll();
-			if(listClients.isEmpty()) {
-				System.out.println("Clients not found");
-			} else {
-				listClients.forEach(System.out::println);
-			}
 		};
 	}
 	
