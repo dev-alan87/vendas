@@ -21,11 +21,18 @@ public class SalesApplication {
 		return args -> {
 			System.out.println("Saving clients...");
 			clients.save(new Client("Alan Alves"));
+			clients.save(new Client("Simone Alves de Souza"));
 			clients.save(new Client("Maria do Carmo"));
 			
 			System.out.println("\nListing clients...");
 			List<Client> listClients = clients.findAll();
 			listClients.forEach(System.out::println);
+			
+			System.out.println("\nFind clients...");
+			if(clients.existsByNameLike("%Alves%"))
+				clients.findByNameLike("%Alves%").forEach(System.out::println);
+			else
+				System.out.println("Client not found");
 			
 			System.out.println("\nUpdating clients...");
 			listClients.forEach(client -> {
@@ -37,16 +44,13 @@ public class SalesApplication {
 			listClients = clients.findAll();
 			listClients.forEach(System.out::println);
 			
-			System.out.println("\nFind clients...");
-			clients.findByNameLike("Carmo").forEach(System.out::println);
-			
 			System.out.println("\nDeleting clients...");
 			clients.findAll().forEach(client -> {
 				clients.delete(client);
 			});
 			listClients = clients.findAll();
 			if(listClients.isEmpty()) {
-				System.out.println("There aren't clients registered.");
+				System.out.println("Client not found");
 			} else {
 				listClients.forEach(System.out::println);
 			}
