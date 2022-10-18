@@ -28,9 +28,15 @@ public class SalesApplication {
 			List<Client> listClients = clients.findAll();
 			listClients.forEach(System.out::println);
 			
-			System.out.println("\nFind clients...");
+			System.out.println("\nFind clients Alves...");
 			if(clients.existsByNameLike("%Alves%"))
 				clients.findByNameLike("%Alves%").forEach(System.out::println);
+			else
+				System.out.println("Client not found");
+			
+			System.out.println("\nList clients Carmo...");
+			if(clients.existsByNameLike("%Carmo%"))
+				clients.findByNameNative("%Carmo%").forEach(System.out::println);
 			else
 				System.out.println("Client not found");
 			
@@ -38,6 +44,16 @@ public class SalesApplication {
 			listClients.forEach(client -> {
 				client.setName(client.getName() + " (updated)");
 				clients.save(client);
+			});
+			
+			System.out.println("\nListing clients...");
+			listClients = clients.findAll();
+			listClients.forEach(System.out::println);
+			
+			System.out.println("\nDeleting Alan Alves (updated)...");
+			clients.findAll().forEach(client -> {
+				if(client.getName().equals("Alan Alves (updated)"))
+					clients.deleteByName(client.getName());
 			});
 			
 			System.out.println("\nListing clients...");
