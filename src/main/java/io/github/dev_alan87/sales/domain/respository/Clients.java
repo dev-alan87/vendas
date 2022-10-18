@@ -31,6 +31,9 @@ public class Clients {
 	
 	@Transactional
 	public void delete(Client client) {
+		if(!manager.contains(client))
+			client = manager.merge(client);
+		
 		manager.remove(client);
 	}
 	@Transactional
@@ -45,6 +48,11 @@ public class Clients {
 		query.setParameter("name", "%"+name+"%");
 		
 		return query.getResultList();
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Client> listAll() {
+		return manager.createQuery("from Client", Client.class).getResultList();
 	}
 	
 }
