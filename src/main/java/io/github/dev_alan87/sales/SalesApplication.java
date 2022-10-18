@@ -24,27 +24,27 @@ public class SalesApplication {
 			clients.save(new Client("Maria do Carmo"));
 			
 			System.out.println("\nListing clients...");
-			List<Client> listClients = clients.listAll();
+			List<Client> listClients = clients.findAll();
 			listClients.forEach(System.out::println);
 			
 			System.out.println("\nUpdating clients...");
 			listClients.forEach(client -> {
 				client.setName(client.getName() + " (updated)");
-				clients.update(client);
+				clients.save(client);
 			});
 			
 			System.out.println("\nListing clients...");
-			listClients = clients.listAll();
+			listClients = clients.findAll();
 			listClients.forEach(System.out::println);
 			
 			System.out.println("\nFind clients...");
-			clients.findByName("Carmo").forEach(System.out::println);
+			clients.findByNameLike("Carmo").forEach(System.out::println);
 			
 			System.out.println("\nDeleting clients...");
-			clients.listAll().forEach(client -> {
+			clients.findAll().forEach(client -> {
 				clients.delete(client);
 			});
-			listClients = clients.listAll();
+			listClients = clients.findAll();
 			if(listClients.isEmpty()) {
 				System.out.println("There aren't clients registered.");
 			} else {
