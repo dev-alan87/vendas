@@ -29,7 +29,7 @@ public class Purchase {
 	@Column(name = "purchase_date")
 	private LocalDate purchaseDate;
 	
-	@Column()
+	@Column(precision = 20, scale = 2)
 	private BigDecimal total;
 	
 	@OneToMany(mappedBy = "purchase")

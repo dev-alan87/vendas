@@ -35,9 +35,11 @@ public class SalesApplication {
 			purchase01.setTotal(BigDecimal.valueOf(100));
 			purchases.save(purchase01);
 			
-			Client client = clients.findClientFetchPurchases(clientAlan.getId());
-			System.out.println(client);
-			System.out.println(client.getPurchases());
+//			Client client = clients.findClientFetchPurchases(clientAlan.getId());
+//			System.out.println(client);
+//			System.out.println(client.getPurchases());
+			
+			purchases.findByClient(clientAlan).forEach(System.out::println);
 			
 		};
 	}
