@@ -11,18 +11,24 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="CLIENT")
 public class Client {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="id")
+	@Column(name = "id")
 	private Integer id;
 	
-	@Column(name="name", length=250, nullable=false)
+	@Column(name = "name", length = 50, nullable = false)
 	private String name;
 	
+	@Column(name="cpf", length = 14)
+	private String cpf;
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
 	private Set<Purchase> purchases;
 	
@@ -47,15 +53,22 @@ public class Client {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getCpf() {
+		return cpf;
+	}
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
 	public Set<Purchase> getPurchases() {
 		return purchases;
 	}
 	public void setPurchases(Set<Purchase> purchases) {
 		this.purchases = purchases;
 	}
+	
 	@Override
 	public String toString() {
-		return "Client [id=" + id + ", name=" + name + "]";
+		return "Client [id=" + id + ", name=" + name + ", CPF=" + cpf + "]";
 	}
 	
 }
