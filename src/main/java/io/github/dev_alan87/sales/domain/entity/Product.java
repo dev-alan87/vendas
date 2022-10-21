@@ -21,7 +21,7 @@ public class Product {
 	@Column(name = "description", length = 1000, nullable = false)
 	private String description;
 	
-	@Column(name = "unit_price")
+	@Column(name = "unit_price", precision = 20, scale = 2)
 	private BigDecimal price;
 	
 	public Integer getId() {
