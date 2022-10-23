@@ -18,7 +18,7 @@ public class Product {
 	@Column(name = "id")
 	private Integer id;
 	
-	@Column(name = "description", length = 1000, nullable = false)
+	@Column(name = "description", length = 1000)
 	private String description;
 	
 	@Column(name = "unit_price", precision = 20, scale = 2)
