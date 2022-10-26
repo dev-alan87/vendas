@@ -14,8 +14,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name = "PURCHASE")
+@Getter @Setter
 public class Purchase {
 
 	@Id
@@ -35,36 +39,6 @@ public class Purchase {
 	@OneToMany(mappedBy = "purchase")
 	private List<PurchaseItem> items;
 	
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public Client getClient() {
-		return client;
-	}
-	public void setClient(Client client) {
-		this.client = client;
-	}
-	public LocalDate getPurchaseDate() {
-		return purchaseDate;
-	}
-	public void setPurchaseDate(LocalDate purchaseDate) {
-		this.purchaseDate = purchaseDate;
-	}
-	public BigDecimal getTotal() {
-		return total;
-	}
-	public void setTotal(BigDecimal total) {
-		this.total = total;
-	}
-	public List<PurchaseItem> getItems() {
-		return items;
-	}
-	public void setItems(List<PurchaseItem> items) {
-		this.items = items;
-	}
 	@Override
 	public String toString() {
 		return "Purchase [id=" + id + ", purchaseDate=" + purchaseDate + ", total=" + total + "]";

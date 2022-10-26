@@ -13,8 +13,12 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name="CLIENT")
+@Getter @Setter
 public class Client {
 
 	@Id
@@ -40,31 +44,6 @@ public class Client {
 		this.name = name;
 	}
 	public Client() {}
-	
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getCpf() {
-		return cpf;
-	}
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-	public Set<Purchase> getPurchases() {
-		return purchases;
-	}
-	public void setPurchases(Set<Purchase> purchases) {
-		this.purchases = purchases;
-	}
 	
 	@Override
 	public String toString() {

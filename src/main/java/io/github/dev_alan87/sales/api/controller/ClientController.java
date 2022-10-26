@@ -25,10 +25,10 @@ import io.github.dev_alan87.sales.domain.respository.Clients;
 @RequestMapping("/api/clients")
 public class ClientController {
 
-	private Clients clients;
+	private Clients repository;
 	
 	public ClientController(Clients clients) {
-		this.clients = clients;
+		this.repository = clients;
 	}
 	
 	@RequestMapping(
@@ -44,7 +44,7 @@ public class ClientController {
 	@GetMapping(value = {"/{id}"})
 	@ResponseStatus(value = HttpStatus.FOUND)
 	public Client getClientById(@PathVariable("id") Integer id) {
-		return clients.findById(id)
+		return repository.findById(id)
 				.orElseThrow(() -> 
 					new ResponseStatusException(
 							HttpStatus.NOT_FOUND, 
@@ -55,14 +55,14 @@ public class ClientController {
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public Client saveClient(@RequestBody Client client) {
-		return clients.save(client);
+		return repository.save(client);
 	}
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void deleteClient(@PathVariable Integer id) {
-		clients.findById(id).map( c -> {
-			clients.delete(c);
+		repository.findById(id).map( c -> {
+			repository.delete(c);
 			return c;
 		}).orElseThrow(() -> 
 			new ResponseStatusException(
@@ -74,9 +74,9 @@ public class ClientController {
 	@PutMapping("/{id}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public Client updateClient(@PathVariable Integer id, @RequestBody Client client) {
-		return clients.findById(id).map(c -> {
+		return repository.findById(id).map(c -> {
 			client.setId(c.getId());
-			clients.save(client);
+			repository.save(client);
 			return client;
 		}).orElseThrow(() -> 
 			new ResponseStatusException(
@@ -93,7 +93,7 @@ public class ClientController {
 				withStringMatcher(StringMatcher.CONTAINING);
 		
 		Example<Client> example = Example.of(filter, matcher);
-		return clients.findAll(example);
+		return repository.findAll(example);
 	}
 	
 }
