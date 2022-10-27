@@ -14,12 +14,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+
+@Data @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name = "PURCHASE")
-@Getter @Setter
 public class Purchase {
 
 	@Id
@@ -38,10 +40,5 @@ public class Purchase {
 	
 	@OneToMany(mappedBy = "purchase")
 	private List<PurchaseItem> items;
-	
-	@Override
-	public String toString() {
-		return "Purchase [id=" + id + ", purchaseDate=" + purchaseDate + ", total=" + total + "]";
-	}
 	
 }

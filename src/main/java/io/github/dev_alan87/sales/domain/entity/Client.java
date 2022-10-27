@@ -13,12 +13,12 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data @NoArgsConstructor
 @Entity
 @Table(name="CLIENT")
-@Getter @Setter
 public class Client {
 
 	@Id
@@ -43,11 +43,4 @@ public class Client {
 	public Client(String name) {
 		this.name = name;
 	}
-	public Client() {}
-	
-	@Override
-	public String toString() {
-		return "Client [id=" + id + ", name=" + name + ", CPF=" + cpf + "]";
-	}
-	
 }
