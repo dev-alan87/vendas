@@ -1,7 +1,10 @@
 package io.github.dev_alan87.sales.service.impl;
 
+import static org.mockito.Mockito.inOrder;
+
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +14,7 @@ import io.github.dev_alan87.sales.api.controller.dto.PurchaseDTO;
 import io.github.dev_alan87.sales.api.controller.dto.PurchaseItemDTO;
 import io.github.dev_alan87.sales.domain.entity.Purchase;
 import io.github.dev_alan87.sales.domain.entity.PurchaseItem;
+import io.github.dev_alan87.sales.domain.entity.enums.PurchaseStatus;
 import io.github.dev_alan87.sales.domain.respository.Clients;
 import io.github.dev_alan87.sales.domain.respository.Products;
 import io.github.dev_alan87.sales.domain.respository.PurchaseItems;
@@ -33,15 +37,16 @@ public class PurchaseServiceImpl implements PurchaseService {
 		Purchase purchase = new Purchase();
 		purchase.setTotal(dto.getTotal());
 		purchase.setPurchaseDate(LocalDate.now());
+		purchase.setStatus(PurchaseStatus.APPROVED);
 		purchase.setClient(clients
 							.findById(dto.getClient())
 							.orElseThrow(() -> 
-								new RuleExcepcion("Client not found")
+								new RuleExcepcion("Invalid client code.")
 							)
 						);
 		repository.save(purchase);
 
-		purchase.setItems(this.convertItems(purchase, dto.getItems())); //verificar se vai retornar purchase completo
+		purchase.setItems(this.convertItems(purchase, dto.getItems()));
 		items.saveAll(purchase.getItems());
 
 		return purchase;
@@ -60,11 +65,28 @@ public class PurchaseServiceImpl implements PurchaseService {
 					item.setProduct(products
 										.findById(dto.getProduct())
 										.orElseThrow(() -> 
-											new RuleExcepcion("Invalid code product: "+dto.getProduct())
+											new RuleExcepcion("Invalid product code: "+dto.getProduct())
 										)
 									);
 					return item;
 				}).collect(Collectors.toList());
+	}
+
+	@Override
+	public Optional<Purchase> getPurchaseInfo(Integer id) {
+		return repository.findByFetchItems(id);
+	}
+
+	@Override
+	@Transactional
+	public void updateStatus(Integer id, PurchaseStatus status) {
+		repository.findById(id)
+						.map( p -> {
+							p.setStatus(status);
+							return repository.save(p);
+						})
+						.orElseThrow(() -> 
+							new PurchaseNotFoundException());
 	}
 	
 }
