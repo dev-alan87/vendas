@@ -1,7 +1,5 @@
 package io.github.dev_alan87.sales.service.impl;
 
-import static org.mockito.Mockito.inOrder;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
