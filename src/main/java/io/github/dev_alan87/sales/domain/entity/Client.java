@@ -14,9 +14,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data @NoArgsConstructor
+@Data
 @Entity
 @Table(name="CLIENT")
 public class Client {
