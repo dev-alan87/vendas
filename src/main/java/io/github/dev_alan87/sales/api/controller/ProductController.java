@@ -25,17 +25,17 @@ import io.github.dev_alan87.sales.domain.respository.Products;
 public class ProductController {
 
 	private Products respository;
-	
+
 	public ProductController(Products products) {
 		this.respository = products;
 	}
-	
+
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public Product saveProduct(@RequestBody Product product) {
 		return respository.save(product);
 	}
-	
+
 	@PutMapping("/{id}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public Product updateProduct(@PathVariable Integer id, @RequestBody Product product) {
@@ -43,9 +43,9 @@ public class ProductController {
 			product.setId(p.getId());
 			respository.save(product);
 			return product;
-		}).orElseThrow(() -> 
+		}).orElseThrow(() ->
 			new ResponseStatusException(
-					HttpStatus.NOT_FOUND, 
+					HttpStatus.NOT_FOUND,
 					"Product not found."
 		));
 	}
@@ -56,31 +56,31 @@ public class ProductController {
 		respository.findById(id).map( p -> {
 			respository.delete(p);
 			return p;
-		}).orElseThrow(() -> 
+		}).orElseThrow(() ->
 			new ResponseStatusException(
 					HttpStatus.NOT_FOUND,
 					"Product not found."
 		));
 	}
-	
+
 	@GetMapping(value = {"/{id}"})
 	@ResponseStatus(value = HttpStatus.FOUND)
 	public Product getProductById(@PathVariable("id") Integer id) {
 		return respository.findById(id)
-				.orElseThrow(() -> 
+				.orElseThrow(() ->
 					new ResponseStatusException(
-							HttpStatus.NOT_FOUND, 
+							HttpStatus.NOT_FOUND,
 							"Product not found."
 				));
 	}
-	
+
 	@GetMapping
 	@ResponseStatus(value = HttpStatus.FOUND)
 	public List<Product> findProduct(Product filter) {
 		ExampleMatcher matcher = ExampleMatcher.matching().
 				withIgnoreCase().
 				withStringMatcher(StringMatcher.CONTAINING);
-		
+
 		Example<Product> example = Example.of(filter, matcher);
 		return respository.findAll(example);
 	}

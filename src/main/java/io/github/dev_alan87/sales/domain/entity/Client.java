@@ -13,28 +13,30 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
 @Entity
 @Table(name="CLIENT")
+@Data @NoArgsConstructor @AllArgsConstructor
 public class Client {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private Integer id;
-	
+
 	@Column(name = "name", length = 50, nullable = false)
 	private String name;
-	
+
 	@Column(name="cpf", length = 14)
 	private String cpf;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
 	private Set<Purchase> purchases;
-	
+
 	public Client(Integer id, String name) {
 		this.id = id;
 		this.name = name;

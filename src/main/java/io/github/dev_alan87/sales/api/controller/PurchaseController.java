@@ -31,11 +31,11 @@ import io.github.dev_alan87.sales.service.PurchaseService;
 public class PurchaseController {
 
 	private PurchaseService service;
-	
+
 	public PurchaseController(PurchaseService service) {
 		this.service = service;
 	}
-	
+
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public Integer save(@RequestBody PurchaseDTO dto) {
@@ -52,7 +52,7 @@ public class PurchaseController {
 	@ResponseStatus(value = HttpStatus.FOUND)
 	public PurchaseInfoDTO getById(@PathVariable Integer id) {
 		return service.getPurchaseInfo(id)
-							.map( p -> 
+							.map( p ->
 								convert(p)
 							)
 							.orElseThrow( () ->
@@ -74,8 +74,8 @@ public class PurchaseController {
 	private List<PurchaseItemInfoDTO> convert(List<PurchaseItem> itens) {
 		if(CollectionUtils.isEmpty(itens))
 			return Collections.emptyList();
-		
-		return itens.stream().map( 
+
+		return itens.stream().map(
 			item ->  PurchaseItemInfoDTO.builder()
 						.productDescription(item.getProduct().getDescription())
 						.unitPrice(item.getProduct().getPrice())
@@ -83,6 +83,6 @@ public class PurchaseController {
 						.build()
 		).collect(Collectors.toList());
 	}
-	
-	
+
+
 }

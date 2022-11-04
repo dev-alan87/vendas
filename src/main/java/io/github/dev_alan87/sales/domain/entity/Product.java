@@ -22,11 +22,11 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private Integer id;
-	
+
 	@Column(name = "description", length = 1000)
 	private String description;
-	
+
 	@Column(name = "unit_price", precision = 20, scale = 2)
 	private BigDecimal price;
-	
+
 }

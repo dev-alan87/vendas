@@ -21,16 +21,16 @@ public class PurchaseItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "purchase_id")
 	private Purchase purchase;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
-	
+
 	@Column(nullable = false)
 	private Integer qty;
-	
+
 }

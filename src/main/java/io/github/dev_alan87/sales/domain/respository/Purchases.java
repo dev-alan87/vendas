@@ -16,5 +16,5 @@ public interface Purchases extends JpaRepository<Purchase, Integer> {
 
 	@Query(value = "select p from Purchase p left join p.items where p.id = :id")
 	Optional<Purchase> findByFetchItems(@Param("id") Integer id);
-	
+
 }

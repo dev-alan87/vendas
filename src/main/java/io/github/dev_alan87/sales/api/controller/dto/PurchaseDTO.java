@@ -13,7 +13,7 @@ public class PurchaseDTO {
 	private Integer client;
 	private BigDecimal total;
 	private List<PurchaseItemDTO> items;
-	
-	
-		
+
+
+
 }

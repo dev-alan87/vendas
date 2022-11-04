@@ -28,7 +28,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 	private final Clients clients;
 	private final Products products;
 	private final PurchaseItems items;
-	
+
 	@Override
 	@Transactional
 	public Purchase save(PurchaseDTO dto) {
@@ -38,7 +38,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 		purchase.setStatus(PurchaseStatus.APPROVED);
 		purchase.setClient(clients
 							.findById(dto.getClient())
-							.orElseThrow(() -> 
+							.orElseThrow(() ->
 								new RuleExcepcion("Invalid client code.")
 							)
 						);
@@ -62,7 +62,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 					item.setQty(dto.getQty());
 					item.setProduct(products
 										.findById(dto.getProduct())
-										.orElseThrow(() -> 
+										.orElseThrow(() ->
 											new RuleExcepcion("Invalid product code: "+dto.getProduct())
 										)
 									);
@@ -83,8 +83,8 @@ public class PurchaseServiceImpl implements PurchaseService {
 							p.setStatus(status);
 							return repository.save(p);
 						})
-						.orElseThrow(() -> 
+						.orElseThrow(() ->
 							new PurchaseNotFoundException());
 	}
-	
+
 }

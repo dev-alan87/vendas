@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Getter;
 
 public class ApiError {
-    
+
     @Getter
     private List<String> errors;
 

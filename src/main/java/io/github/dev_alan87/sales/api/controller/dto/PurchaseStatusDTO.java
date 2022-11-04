@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter @Setter
 public class PurchaseStatusDTO {
-    
+
     private String status;
 
 }

@@ -9,5 +9,5 @@ public class PurchaseItemDTO {
 
 	private Integer product;
 	private Integer qty;
-	
+
 }

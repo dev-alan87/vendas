@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor @NoArgsConstructor
 @Builder
 public class PurchaseInfoDTO {
-    
+
     private Integer id;
     private String purchaseDate;
     private String clientName;

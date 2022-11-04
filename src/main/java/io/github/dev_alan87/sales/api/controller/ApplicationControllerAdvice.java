@@ -10,7 +10,7 @@ import io.github.dev_alan87.sales.service.impl.RuleExcepcion;
 
 @RestControllerAdvice
 public class ApplicationControllerAdvice {
-    
+
     @ExceptionHandler(RuleExcepcion.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ApiError handleRuleException(RuleExcepcion ex) {

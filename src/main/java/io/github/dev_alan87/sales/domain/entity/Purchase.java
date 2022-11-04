@@ -30,21 +30,21 @@ public class Purchase {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private Client client;
-	
+
 	@Column(name = "purchase_date")
 	private LocalDate purchaseDate;
-	
+
 	@Column(precision = 20, scale = 2)
 	private BigDecimal total;
 
 	@Enumerated(EnumType.STRING)
 	private PurchaseStatus status;
-	
+
 	@OneToMany(mappedBy = "purchase")
 	private List<PurchaseItem> items;
-	
+
 }
