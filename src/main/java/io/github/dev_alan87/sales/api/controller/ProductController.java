@@ -2,6 +2,8 @@ package io.github.dev_alan87.sales.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
@@ -24,64 +26,57 @@ import io.github.dev_alan87.sales.domain.respository.Products;
 @RequestMapping("/api/products")
 public class ProductController {
 
-	private Products respository;
+    private Products respository;
 
-	public ProductController(Products products) {
-		this.respository = products;
-	}
+    public ProductController(Products products) {
+        this.respository = products;
+    }
 
-	@PostMapping
-	@ResponseStatus(value = HttpStatus.CREATED)
-	public Product saveProduct(@RequestBody Product product) {
-		return respository.save(product);
-	}
+    @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Product saveProduct(@RequestBody @Valid Product product) {
+        return respository.save(product);
+    }
 
-	@PutMapping("/{id}")
-	@ResponseStatus(value = HttpStatus.OK)
-	public Product updateProduct(@PathVariable Integer id, @RequestBody Product product) {
-		return respository.findById(id).map(p -> {
-			product.setId(p.getId());
-			respository.save(product);
-			return product;
-		}).orElseThrow(() ->
-			new ResponseStatusException(
-					HttpStatus.NOT_FOUND,
-					"Product not found."
-		));
-	}
+    @PutMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public Product updateProduct(@PathVariable Integer id,
+            @RequestBody @Valid Product product) {
+        return respository.findById(id).map(p -> {
+            product.setId(p.getId());
+            respository.save(product);
+            return product;
+        }).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Product not found."));
+    }
 
-	@DeleteMapping("/{id}")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void deleteProduct(@PathVariable Integer id) {
-		respository.findById(id).map( p -> {
-			respository.delete(p);
-			return p;
-		}).orElseThrow(() ->
-			new ResponseStatusException(
-					HttpStatus.NOT_FOUND,
-					"Product not found."
-		));
-	}
+    @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteProduct(@PathVariable Integer id) {
+        respository.findById(id).map(p -> {
+            respository.delete(p);
+            return p;
+        }).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Product not found."));
+    }
 
-	@GetMapping(value = {"/{id}"})
-	@ResponseStatus(value = HttpStatus.FOUND)
-	public Product getProductById(@PathVariable("id") Integer id) {
-		return respository.findById(id)
-				.orElseThrow(() ->
-					new ResponseStatusException(
-							HttpStatus.NOT_FOUND,
-							"Product not found."
-				));
-	}
+    @GetMapping(value = { "/{id}" })
+    @ResponseStatus(value = HttpStatus.FOUND)
+    public Product getProductById(@PathVariable("id") Integer id) {
+        return respository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Product not found."));
+    }
 
-	@GetMapping
-	@ResponseStatus(value = HttpStatus.FOUND)
-	public List<Product> findProduct(Product filter) {
-		ExampleMatcher matcher = ExampleMatcher.matching().
-				withIgnoreCase().
-				withStringMatcher(StringMatcher.CONTAINING);
+    @GetMapping
+    @ResponseStatus(value = HttpStatus.FOUND)
+    public List<Product> findProduct(Product filter) {
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING);
 
-		Example<Product> example = Example.of(filter, matcher);
-		return respository.findAll(example);
-	}
+        Example<Product> example = Example.of(filter, matcher);
+        return respository.findAll(example);
+    }
 }

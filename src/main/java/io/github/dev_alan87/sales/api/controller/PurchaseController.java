@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,59 +32,56 @@ import io.github.dev_alan87.sales.service.PurchaseService;
 @RequestMapping("/api/purchases")
 public class PurchaseController {
 
-	private PurchaseService service;
+    private PurchaseService service;
 
-	public PurchaseController(PurchaseService service) {
-		this.service = service;
-	}
+    public PurchaseController(PurchaseService service) {
+        this.service = service;
+    }
 
-	@PostMapping
-	@ResponseStatus(value = HttpStatus.CREATED)
-	public Integer save(@RequestBody PurchaseDTO dto) {
-		return service.save(dto).getId();
-	}
+    @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Integer save(@RequestBody @Valid PurchaseDTO dto) {
+        return service.save(dto).getId();
+    }
 
-	@PatchMapping("/{id}")
-	@ResponseStatus(value = HttpStatus.OK)
-	public void updateStatus(@PathVariable Integer id, @RequestBody PurchaseStatusDTO dto) {
-		service.updateStatus(id, PurchaseStatus.valueOf(dto.getStatus()));
-	}
+    @PatchMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void updateStatus(@PathVariable Integer id,
+            @RequestBody PurchaseStatusDTO dto) {
+        service.updateStatus(id, PurchaseStatus.valueOf(dto.getStatus()));
+    }
 
-	@GetMapping("/{id}")
-	@ResponseStatus(value = HttpStatus.FOUND)
-	public PurchaseInfoDTO getById(@PathVariable Integer id) {
-		return service.getPurchaseInfo(id)
-							.map( p ->
-								convert(p)
-							)
-							.orElseThrow( () ->
-								new ResponseStatusException(HttpStatus.NOT_FOUND)
-							);
-	}
-	private PurchaseInfoDTO convert(Purchase p) {
-		return PurchaseInfoDTO.builder()
-							.id(p.getId())
-							.purchaseDate(p.getPurchaseDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")))
-							.clientName(p.getClient().getName())
-							.cpf(p.getClient().getCpf())
-							.total(p.getTotal())
-							.status(p.getStatus().name())
-							.items(convert(p.getItems()))
-							.build();
-	}
+    @GetMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.FOUND)
+    public PurchaseInfoDTO getById(@PathVariable Integer id) {
+        return service.getPurchaseInfo(id)
+                .map(p -> convert(p))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
 
-	private List<PurchaseItemInfoDTO> convert(List<PurchaseItem> itens) {
-		if(CollectionUtils.isEmpty(itens))
-			return Collections.emptyList();
+    private PurchaseInfoDTO convert(Purchase p) {
+        return PurchaseInfoDTO.builder()
+                .id(p.getId())
+                .purchaseDate(p.getPurchaseDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")))
+                .clientName(p.getClient().getName())
+                .cpf(p.getClient().getCpf())
+                .total(p.getTotal())
+                .status(p.getStatus().name())
+                .items(convert(p.getItems()))
+                .build();
+    }
 
-		return itens.stream().map(
-			item ->  PurchaseItemInfoDTO.builder()
-						.productDescription(item.getProduct().getDescription())
-						.unitPrice(item.getProduct().getPrice())
-						.quantitty(item.getQty())
-						.build()
-		).collect(Collectors.toList());
-	}
+    private List<PurchaseItemInfoDTO> convert(List<PurchaseItem> itens) {
+        if (CollectionUtils.isEmpty(itens))
+            return Collections.emptyList();
 
+        return itens.stream().map(
+                item -> PurchaseItemInfoDTO.builder()
+                        .productDescription(item.getProduct().getDescription())
+                        .unitPrice(item.getProduct().getPrice())
+                        .quantitty(item.getQty())
+                        .build())
+                .collect(Collectors.toList());
+    }
 
 }

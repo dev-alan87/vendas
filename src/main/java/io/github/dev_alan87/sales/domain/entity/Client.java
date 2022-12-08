@@ -10,6 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.br.CPF;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,9 +31,12 @@ public class Client {
 	private Integer id;
 
 	@Column(name = "name", length = 50, nullable = false)
+	@NotEmpty(message = "{client.name.required}")
 	private String name;
 
 	@Column(name="cpf", length = 14)
+	@NotEmpty(message = "{client.cpf.required}")
+	@CPF(message = "{client.cpf.invalid}")
 	private String cpf;
 
 	@JsonIgnore

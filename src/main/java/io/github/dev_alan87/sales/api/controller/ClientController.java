@@ -2,6 +2,8 @@ package io.github.dev_alan87.sales.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
@@ -25,75 +27,65 @@ import io.github.dev_alan87.sales.domain.respository.Clients;
 @RequestMapping("/api/clients")
 public class ClientController {
 
-	private Clients repository;
+    private Clients repository;
 
-	public ClientController(Clients clients) {
-		this.repository = clients;
-	}
+    public ClientController(Clients clients) {
+        this.repository = clients;
+    }
 
-	@RequestMapping(
-				value = { "/hello/{name}", "/welcome" },
-				method = RequestMethod.POST,
-				consumes = { "application/json", "application/xml" },
-				produces = { "application/json", "application/xml" }
-			)
-	public String hellloClient(@PathVariable("name") String clientName, @RequestBody Client client) {
-		return String.format("Hello, %s. Welcome!", clientName);
-	}
+    @RequestMapping(value = { "/hello/{name}", "/welcome" }, method = RequestMethod.POST, consumes = {
+            "application/json", "application/xml" }, produces = { "application/json", "application/xml" })
+    public String hellloClient(@PathVariable("name") String clientName, @RequestBody Client client) {
+        return String.format("Hello, %s. Welcome!", clientName);
+    }
 
-	@GetMapping(value = {"/{id}"})
-	@ResponseStatus(value = HttpStatus.FOUND)
-	public Client getClientById(@PathVariable("id") Integer id) {
-		return repository.findById(id)
-				.orElseThrow(() ->
-					new ResponseStatusException(
-							HttpStatus.NOT_FOUND,
-							"Client not found."
-				));
-	}
+    @GetMapping(value = { "/{id}" })
+    @ResponseStatus(value = HttpStatus.FOUND)
+    public Client getClientById(@PathVariable("id") Integer id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Client not found."));
+    }
 
-	@PostMapping
-	@ResponseStatus(value = HttpStatus.CREATED)
-	public Client saveClient(@RequestBody Client client) {
-		return repository.save(client);
-	}
+    @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Client saveClient(@RequestBody @Valid Client client) {
+        return repository.save(client);
+    }
 
-	@DeleteMapping("/{id}")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void deleteClient(@PathVariable Integer id) {
-		repository.findById(id).map( c -> {
-			repository.delete(c);
-			return c;
-		}).orElseThrow(() ->
-			new ResponseStatusException(
-					HttpStatus.NOT_FOUND,
-					"Client not found."
-		));
-	}
+    @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteClient(@PathVariable Integer id) {
+        repository.findById(id).map(c -> {
+            repository.delete(c);
+            return c;
+        }).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Client not found."));
+    }
 
-	@PutMapping("/{id}")
-	@ResponseStatus(value = HttpStatus.OK)
-	public Client updateClient(@PathVariable Integer id, @RequestBody Client client) {
-		return repository.findById(id).map(c -> {
-			client.setId(c.getId());
-			repository.save(client);
-			return client;
-		}).orElseThrow(() ->
-			new ResponseStatusException(
-					HttpStatus.NOT_FOUND,
-					"Client not found."
-		));
-	}
+    @PutMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public Client updateClient(@PathVariable Integer id,
+            @RequestBody @Valid Client client) {
+        return repository.findById(id)
+                .map(c -> {
+                    client.setId(c.getId());
+                    repository.save(client);
+                    return client;
+                }).orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Client not found."));
+    }
 
-	@GetMapping
-	@ResponseStatus(value = HttpStatus.FOUND)
-	public List<Client> findClient(Client filter) {
-		ExampleMatcher matcher = ExampleMatcher.matching().
-				withIgnoreCase().
-				withStringMatcher(StringMatcher.CONTAINING);
+    @GetMapping
+    @ResponseStatus(value = HttpStatus.FOUND)
+    public List<Client> findClient(Client filter) {
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING);
 
-		Example<Client> example = Example.of(filter, matcher);
-		return repository.findAll(example);
-	}
+        Example<Client> example = Example.of(filter, matcher);
+        return repository.findAll(example);
+    }
 
 }
