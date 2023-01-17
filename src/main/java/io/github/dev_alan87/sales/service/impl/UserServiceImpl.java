@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import io.github.dev_alan87.sales.domain.entity.MyUser;
 import io.github.dev_alan87.sales.domain.respository.UserRepository;
+import io.github.dev_alan87.sales.exception.InvalidPasswordException;
 
 @Service
 public class UserServiceImpl implements UserDetailsService {
@@ -25,6 +26,17 @@ public class UserServiceImpl implements UserDetailsService {
     @Transactional
     public MyUser save(MyUser user) {
         return repository.save(user);
+    }
+    
+    public UserDetails authenticate(MyUser user) {
+        UserDetails userDetails =
+                loadUserByUsername(user.getUsername());
+        if(encoder.matches(
+                user.getPassword(), 
+                userDetails.getPassword())) {
+            return userDetails;
+        }
+        throw new InvalidPasswordException();
     }
     
     @Override

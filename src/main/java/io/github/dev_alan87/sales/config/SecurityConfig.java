@@ -8,9 +8,14 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
+import io.github.dev_alan87.sales.security.jwt.JwtAuthFilter;
+import io.github.dev_alan87.sales.security.jwt.JwtService;
 import io.github.dev_alan87.sales.service.impl.UserServiceImpl;
 
 @EnableWebSecurity
@@ -20,9 +25,17 @@ public class SecurityConfig
     @Autowired @Lazy
     private UserServiceImpl userService;
     
+    @Autowired
+    private JwtService jwtService;
+    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    
+    @Bean
+    public OncePerRequestFilter jwtFilter() {
+        return new JwtAuthFilter(jwtService, userService);
     }
 
     @Override
@@ -37,17 +50,16 @@ public class SecurityConfig
         http
             .csrf().disable()
             .authorizeRequests()
-                .antMatchers("api/products/**")
-                    .hasRole("ADMIN")
-                .antMatchers("api/clients/**")
-                    .hasAnyRole("USER", "ADMIN")
-                .antMatchers("api/purchases/**")
-                    .hasAnyRole("USER", "ADMIN")
-                .antMatchers(HttpMethod.POST, "api/users")
-                    .permitAll()
+                .antMatchers("/api/products/**").hasRole("ADMIN")
+                .antMatchers("/api/clients/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/api/purchases/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/users").permitAll()
+                .antMatchers("/").authenticated()
             .and()
-                .httpBasic();
-        super.configure(http);
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
 }
