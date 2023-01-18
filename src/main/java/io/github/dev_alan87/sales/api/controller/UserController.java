@@ -1,7 +1,5 @@
 package io.github.dev_alan87.sales.api.controller;
 
-import static org.assertj.core.api.Assertions.catchException;
-
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
