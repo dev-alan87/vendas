@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import io.github.dev_alan87.sales.error.ApiError;
 import io.github.dev_alan87.sales.service.impl.PurchaseNotFoundException;
 import io.github.dev_alan87.sales.service.impl.RuleExcepcion;
 

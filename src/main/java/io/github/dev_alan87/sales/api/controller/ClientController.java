@@ -22,6 +22,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import io.github.dev_alan87.sales.domain.entity.Client;
 import io.github.dev_alan87.sales.domain.respository.Clients;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/api/clients")
@@ -33,15 +37,14 @@ public class ClientController {
         this.repository = clients;
     }
 
-    @RequestMapping(value = { "/hello/{name}", "/welcome" }, method = RequestMethod.POST, consumes = {
-            "application/json", "application/xml" }, produces = { "application/json", "application/xml" })
-    public String hellloClient(@PathVariable("name") String clientName, @RequestBody Client client) {
-        return String.format("Hello, %s. Welcome!", clientName);
-    }
-
     @GetMapping(value = { "/{id}" })
-    @ResponseStatus(value = HttpStatus.FOUND)
-    public Client getClientById(@PathVariable("id") Integer id) {
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation("Get a client details")
+    @ApiResponses({
+                @ApiResponse(code = 200, message = "Client found."),
+                @ApiResponse(code = 404, message = "Client not found by sent id.")
+        })
+    public Client getClientById(@PathVariable("id") @ApiParam("Client id") Integer id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,

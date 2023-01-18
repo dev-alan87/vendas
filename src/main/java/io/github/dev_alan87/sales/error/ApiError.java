@@ -1,4 +1,4 @@
-package io.github.dev_alan87.sales.api.controller;
+package io.github.dev_alan87.sales.error;
 
 import java.util.Arrays;
 import java.util.List;
