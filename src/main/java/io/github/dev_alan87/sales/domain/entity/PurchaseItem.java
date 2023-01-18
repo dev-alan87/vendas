@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class PurchaseItem {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@ManyToOne

@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class MyUser {
     
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
     @Column
@@ -28,6 +28,6 @@ public class MyUser {
     @NotEmpty(message = "{user.password.required}")
     private String password;
     
-    @Column
+    @Column(columnDefinition = "default false")
     private boolean admin;
 }
